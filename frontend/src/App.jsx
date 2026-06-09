@@ -20,7 +20,7 @@ function App() {
   }
 
   return (
-    <Router>
+    <Router basename={import.meta.env.BASE_URL}>
       <div className="flex min-h-screen bg-cream-50 md:h-screen">
         <Sidebar isOpen={sidebarOpen} onToggle={() => setSidebarOpen(!sidebarOpen)} />
         <div className="flex min-w-0 flex-1 flex-col overflow-hidden">

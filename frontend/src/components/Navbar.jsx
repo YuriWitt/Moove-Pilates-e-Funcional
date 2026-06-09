@@ -1,12 +1,14 @@
 import { Bell, LogOut, Search, User } from 'lucide-react'
 
+const sublogoUrl = `${import.meta.env.BASE_URL}brand/sublogo.jpg`
+
 export default function Navbar({ onLogout }) {
   return (
     <nav className="sticky top-0 z-40 border-b border-cream-200 bg-white/95 backdrop-blur">
       <div className="flex items-center justify-between gap-3 px-4 py-3 sm:px-6">
         <div className="flex min-w-0 items-center gap-3">
           <span className="hidden h-10 w-10 shrink-0 overflow-hidden rounded-full bg-primary-900 ring-1 ring-gold-300/30 sm:block">
-            <img src="/brand/sublogo.jpg" alt="MOOVE" className="h-full w-full scale-[1.6] object-cover" />
+            <img src={sublogoUrl} alt="MOOVE" className="h-full w-full scale-[1.6] object-cover" />
           </span>
           <div className="min-w-0">
             <p className="text-[10px] font-semibold uppercase text-gold-600 sm:text-xs">MOOVE</p>

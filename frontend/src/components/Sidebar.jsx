@@ -10,6 +10,8 @@ import {
   Wallet,
 } from 'lucide-react'
 
+const sublogoUrl = `${import.meta.env.BASE_URL}brand/sublogo.jpg`
+
 export default function Sidebar({ isOpen, onToggle }) {
   const menuItems = [
     { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' },
@@ -27,7 +29,7 @@ export default function Sidebar({ isOpen, onToggle }) {
           {isOpen && (
             <div className="flex items-center gap-3">
               <span className="flex h-10 w-10 shrink-0 overflow-hidden rounded-xl bg-primary-900 ring-1 ring-gold-300/30">
-                <img src="/brand/sublogo.jpg" alt="MOOVE" className="h-full w-full scale-[1.65] object-cover" />
+                <img src={sublogoUrl} alt="MOOVE" className="h-full w-full scale-[1.65] object-cover" />
               </span>
               <div>
                 <p className="text-lg font-bold leading-none tracking-wide">MOOVE</p>

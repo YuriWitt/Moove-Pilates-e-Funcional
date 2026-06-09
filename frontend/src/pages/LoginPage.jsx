@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { Lock, User } from 'lucide-react'
 
+const logoUrl = `${import.meta.env.BASE_URL}brand/logomarca.jpg`
+
 export default function LoginPage({ onLogin }) {
   const [username, setUsername] = useState('admin')
   const [password, setPassword] = useState('123456')
@@ -35,7 +37,7 @@ export default function LoginPage({ onLogin }) {
           <div>
             <div className="max-w-[390px] overflow-hidden rounded-xl border border-gold-500/30 bg-primary-900 shadow-lg shadow-black/10">
               <img
-                src="/brand/logomarca.jpg"
+                src={logoUrl}
                 alt="MOOVE Studio Integrado"
                 className="h-28 w-full object-cover"
                 style={{ objectPosition: 'center 50%' }}
@@ -66,7 +68,7 @@ export default function LoginPage({ onLogin }) {
           <div className="mb-6 text-center md:hidden">
             <div className="mx-auto max-w-[320px] overflow-hidden rounded-xl border border-gold-500/20 bg-primary-900 shadow-sm">
               <img
-                src="/brand/logomarca.jpg"
+                src={logoUrl}
                 alt="MOOVE Studio Integrado"
                 className="h-24 w-full object-cover"
                 style={{ objectPosition: 'center 50%' }}

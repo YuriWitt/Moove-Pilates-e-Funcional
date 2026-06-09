@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { Camera, Check, Fingerprint, Printer, RotateCcw, Save, Trash2, X } from 'lucide-react'
 
+const sublogoUrl = `${import.meta.env.BASE_URL}brand/sublogo.jpg`
+
 const initialForm = {
   nomeCompleto: '',
   dataNascimento: '',
@@ -565,7 +567,7 @@ function CheckboxLike({ checked, onClick, children }) {
 function Watermark() {
   return (
     <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-[0.07]">
-      <img src="/brand/sublogo.jpg" alt="" className="h-[72%] max-h-[560px] w-auto rotate-[-18deg] rounded-full object-cover" />
+      <img src={sublogoUrl} alt="" className="h-[72%] max-h-[560px] w-auto rotate-[-18deg] rounded-full object-cover" />
     </div>
   )
 }
