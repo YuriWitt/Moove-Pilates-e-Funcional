@@ -523,7 +523,7 @@ function InlineChoice({ label, value, options, onChange }) {
 
 function YesNoChoice({ label, value, onChange }) {
   return (
-    <div className="flex min-w-0 items-center gap-2 text-sm">
+    <div className="flex min-w-0 flex-wrap items-center gap-2 text-sm">
       <span className="min-w-0 flex-1 font-semibold text-gray-600">{label}:</span>
       <CheckboxLike checked={value === 'S'} onClick={() => onChange('S')}>S</CheckboxLike>
       <CheckboxLike checked={value === 'N'} onClick={() => onChange('N')}>N</CheckboxLike>
@@ -557,10 +557,15 @@ function BiometricStatus({ label, active }) {
 
 function CheckboxLike({ checked, onClick, children }) {
   return (
-    <button type="button" onClick={onClick} className="inline-flex min-w-0 items-center gap-1 text-left text-sm text-gray-600">
-      <span className={`h-3.5 w-3.5 shrink-0 rounded-[3px] border border-[#c8afd5] ${checked ? 'bg-[#c8afd5]' : 'bg-[#d9c5e1]'}`} />
+    <label className={`inline-flex min-w-0 cursor-pointer items-center gap-1.5 rounded-md px-1.5 py-1 text-left text-sm transition-colors ${checked ? 'bg-[#f2e7f6] text-primary-800' : 'text-gray-600 hover:bg-[#f7f0fa]'}`}>
+      <input
+        type="checkbox"
+        checked={checked}
+        onChange={onClick}
+        className="h-4 w-4 shrink-0 cursor-pointer rounded border-[#c8afd5] accent-[#c8afd5]"
+      />
       <span className="min-w-0">{children}</span>
-    </button>
+    </label>
   )
 }
 
