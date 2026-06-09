@@ -404,7 +404,7 @@ export default function CadastroAlunoPage() {
                 <InlineChoice label="Trânsito intestinal" value={formData.transitoIntestinal} options={['Regular', 'Irregular']} onChange={(value) => updateField('transitoIntestinal', value)} />
                 <LineInput label="Consumo de água/dia" value={formData.consumoAgua} onChange={(value) => updateField('consumoAgua', value)} />
               </div>
-              <div className="grid gap-3 md:grid-cols-[190px_1fr]">
+              <div className="grid gap-1 md:grid-cols-[max-content_1fr]">
                 <InlineChoice label="Atividade Física" value={formData.atividadeFisica} options={['S', 'N']} onChange={(value) => updateField('atividadeFisica', value)} />
                 <LineInput label="Qual / frequência" value={formData.atividadeQualFrequencia} onChange={(value) => updateField('atividadeQualFrequencia', value)} />
               </div>
