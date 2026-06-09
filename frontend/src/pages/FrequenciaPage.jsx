@@ -9,7 +9,17 @@ const initialFrequencias = [
   { id: 5, aluno: 'Pedro Oliveira', aulas: 12, presentes: 5, faltas: 7, ultimaPresenca: '01/06/2026', registradoHoje: false },
 ]
 
+const initialAcessosSemana = [
+  { dia: 'Seg', acessos: 18, color: '#8d6f23' },
+  { dia: 'Ter', acessos: 15, color: '#00103b' },
+  { dia: 'Qua', acessos: 21, color: '#b8a744' },
+  { dia: 'Qui', acessos: 17, color: '#061a46' },
+  { dia: 'Sex', acessos: 14, color: '#744d0f' },
+  { dia: 'Sab', acessos: 9, color: '#d2c164' },
+]
+
 const hoje = '08/06/2026'
+const diaHoje = 'Seg'
 
 function taxaPresenca(freq) {
   return freq.aulas ? Number(((freq.presentes / freq.aulas) * 100).toFixed(1)) : 0
@@ -31,10 +41,25 @@ const statusStyle = {
   Baixa: 'bg-red-50 text-red-800 border-red-200',
 }
 
+function buildPieGradient(items, total) {
+  if (!total) return '#eee6d4'
+
+  let start = 0
+  const segments = items.map((item) => {
+    const end = start + (item.acessos / total) * 100
+    const segment = `${item.color} ${start}% ${end}%`
+    start = end
+    return segment
+  }).join(', ')
+
+  return `conic-gradient(${segments})`
+}
+
 export default function FrequenciaPage() {
   const [filtro, setFiltro] = useState('todos')
   const [selectedAula, setSelectedAula] = useState('Pilates Matutino')
   const [frequencias, setFrequencias] = useState(initialFrequencias)
+  const [acessosSemana, setAcessosSemana] = useState(initialAcessosSemana)
 
   const enriched = useMemo(() => frequencias.map((freq) => {
     const taxa = taxaPresenca(freq)
@@ -59,8 +84,19 @@ export default function FrequenciaPage() {
     { media: 0, alta: 0, regular: 0, baixa: 0 },
   )
   const media = enriched.length ? (resumo.media / enriched.length).toFixed(1) : '0.0'
+  const totalAcessosSemana = acessosSemana.reduce((acc, item) => acc + item.acessos, 0)
+  const maiorAcessoSemana = Math.max(...acessosSemana.map((item) => item.acessos), 1)
+  const diaMaisMovimento = acessosSemana.reduce((maior, item) => (item.acessos > maior.acessos ? item : maior), acessosSemana[0])
+  const pieGradient = buildPieGradient(acessosSemana, totalAcessosSemana)
 
   const registrar = (id, presente) => {
+    const frequenciaAtual = frequencias.find((freq) => freq.id === id)
+    if (presente && frequenciaAtual && !frequenciaAtual.registradoHoje) {
+      setAcessosSemana((semana) => semana.map((dia) => (
+        dia.dia === diaHoje ? { ...dia, acessos: dia.acessos + 1 } : dia
+      )))
+    }
+
     setFrequencias((prev) => prev.map((freq) => {
       if (freq.id !== id) return freq
       const jaRegistrado = freq.registradoHoje
@@ -137,6 +173,72 @@ export default function FrequenciaPage() {
               <option value="regular">Regular</option>
               <option value="baixa">Baixa frequência</option>
             </select>
+          </div>
+        </div>
+      </section>
+
+      <section className="brand-panel mb-5 rounded-xl p-4 sm:mb-6 sm:p-6">
+        <div className="mb-5 flex flex-col justify-between gap-3 lg:flex-row lg:items-end">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gold-600">Acessos na academia</p>
+            <h2 className="mt-1 text-xl font-bold text-primary-800">Frequencia semanal</h2>
+            <p className="mt-1 text-sm text-gray-600">Volume de entradas registradas por dia da semana.</p>
+          </div>
+          <div className="grid grid-cols-2 gap-2 text-sm sm:flex">
+            <div className="rounded-lg bg-cream-50 px-4 py-3">
+              <p className="text-xs font-semibold text-gray-500">Total semanal</p>
+              <p className="text-xl font-bold text-primary-800">{totalAcessosSemana}</p>
+            </div>
+            <div className="rounded-lg bg-cream-50 px-4 py-3">
+              <p className="text-xs font-semibold text-gray-500">Maior movimento</p>
+              <p className="text-xl font-bold text-primary-800">{diaMaisMovimento.dia}</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="md:hidden">
+          <div className="space-y-3">
+            {acessosSemana.map((item) => {
+              const percent = Math.round((item.acessos / maiorAcessoSemana) * 100)
+              return (
+                <div key={item.dia}>
+                  <div className="mb-1 flex items-center justify-between text-sm">
+                    <span className="font-bold text-gray-700">{item.dia}</span>
+                    <span className="font-semibold text-primary-800">{item.acessos} acessos</span>
+                  </div>
+                  <div className="h-3 overflow-hidden rounded-full bg-cream-200">
+                    <div className="h-full rounded-full" style={{ width: `${percent}%`, backgroundColor: item.color }} />
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+
+        <div className="hidden grid-cols-[260px_1fr] gap-8 md:grid md:items-center">
+          <div className="relative mx-auto flex h-56 w-56 items-center justify-center rounded-full shadow-inner" style={{ background: pieGradient }}>
+            <div className="flex h-28 w-28 flex-col items-center justify-center rounded-full bg-white text-center shadow-sm">
+              <span className="text-3xl font-bold text-primary-800">{totalAcessosSemana}</span>
+              <span className="text-xs font-semibold uppercase text-gray-500">acessos</span>
+            </div>
+          </div>
+
+          <div className="grid gap-3 lg:grid-cols-2">
+            {acessosSemana.map((item) => {
+              const percent = totalAcessosSemana ? Math.round((item.acessos / totalAcessosSemana) * 100) : 0
+              return (
+                <div key={item.dia} className="flex items-center justify-between gap-3 rounded-xl border border-cream-200 bg-white p-4">
+                  <div className="flex min-w-0 items-center gap-3">
+                    <span className="h-4 w-4 shrink-0 rounded-full" style={{ backgroundColor: item.color }} />
+                    <div>
+                      <p className="font-bold text-gray-950">{item.dia}</p>
+                      <p className="text-xs text-gray-500">{percent}% da semana</p>
+                    </div>
+                  </div>
+                  <p className="text-xl font-bold text-primary-800">{item.acessos}</p>
+                </div>
+              )
+            })}
           </div>
         </div>
       </section>
